@@ -36,6 +36,13 @@
     (let [cell (s/select-cell (str column row) sheet)]
       (s/set-cell-style! cell style))))
 
+(defn add-total! [sheet rownum]
+  (let [row (.createRow sheet rownum)
+        cell (.createCell row 5)
+        _ (.createCell row 1)]
+    (.setCellFormula cell (str "SUM(F2:F" (dec rownum) ")"))))
+
+
 (defn process-excel [source target]
   (let [xml-data (xml/parse-str (slurp source))
         rows (-> xml-data :content (nth 2) :content first :content)
@@ -50,9 +57,16 @@
         monetary-style (s/create-cell-style! wb {:data-format monetary-style-string})
         sheet (s/select-sheet "Hours" wb)
         row-count (set-formulas! sheet 2)]
-    (set-styles! sheet monetary-style ["B" "F"] 2 row-count)
-    (s/save-workbook! target wb)))
+    (add-total! sheet (dec row-count))
+    (set-styles! sheet monetary-style ["B" "F"] 2 (inc row-count))
+    (s/save-workbook! target wb)
+    (->> sheet (s/select-cell (str "F" row-count)) s/read-cell)))
 
-(defn -main
-  [source target]
-  (process-excel source target))
+(defn format-euro [num]
+  (-> (format "%1.2f" num)
+    (clojure.string/replace-first "." ",")
+    (str " €")))
+
+(defn -main [source target]
+  (let [total (process-excel source target)]
+    (println (format-euro total))))
