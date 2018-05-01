@@ -1,36 +1,23 @@
-# planmill-sum
+# Planmill Sum
 
-FIXME: description
+Read a hour report exported from Planmill, add a total sum column and output the total sum of billable hours in the report.
 
-## Installation
+## Compile
 
-Download from http://example.com/FIXME.
+```
+lein uberjar
+```
 
 ## Usage
 
-FIXME: explanation
-
-    $ java -jar planmill-sum-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
+```
+$ java -jar target/uberjar/planmill-sum.jar export.xml output.xlsx
+```
 
 ## License
 
-Copyright © 2018 FIXME
+Licensed with [MIT License](LICENSE).
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+## Thanks
+
+This project is a grateful recipient of the [Futurice Open Source sponsorship program](http://futurice.com/blog/sponsoring-free-time-open-source-activities?utm_source=github&utm_medium=spice) 🌶🦄.
